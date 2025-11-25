@@ -1,0 +1,28 @@
+services:
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - "8800:8800"
+    volumes:
+      - ./api/public:/app/public
+    environment:
+      - MONGO_URL=${MONGO_URL}
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+  mongo:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+    env_file:
+      - .env
+volumes:
+  mongo_data:
